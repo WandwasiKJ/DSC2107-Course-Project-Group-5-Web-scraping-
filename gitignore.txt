@@ -1,0 +1,10 @@
+.venv/
+__pycache__/
+*.pyc
+logs/
+.ipynb_checkpoints/
+# Saved real pages contain seller descriptions (some with phone numbers):
+tests/fixtures/
+# Rules of Engagement (g): never publish the dataset. Keep these out of any PUBLIC repo:
+# data/raw/
+# db/*.db
