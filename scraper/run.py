@@ -21,7 +21,7 @@ import random
 import sys
 from datetime import date, datetime, timezone
 
-import config
+import scraper.config as config
 from scraper.fetch import (BlockedError, BudgetExceeded, PoliteSession,
                            RobotsDisallowed)
 from scraper.parse import (match_listing_url, parse_detail, parse_listing_cards,

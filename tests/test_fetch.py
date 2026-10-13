@@ -4,7 +4,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-import config
+import scraper.config as config
 from scraper.fetch import BudgetExceeded, PoliteSession, looks_blocked
 
 

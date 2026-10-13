@@ -17,7 +17,7 @@ from urllib.parse import urlparse
 
 import requests  # type: ignore[reportMissingModuleSource]
 
-import config
+import scraper.config as config
 
 log = logging.getLogger(__name__)
 

@@ -9,7 +9,7 @@ from datetime import datetime, timedelta
 
 import pandas as pd
 
-import config
+import scraper.config as config
 
 CONDITION_MAP = {
     "brand new": "new", "new": "new",

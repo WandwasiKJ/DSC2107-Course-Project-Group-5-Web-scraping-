@@ -18,7 +18,7 @@ from urllib.parse import parse_qs, urlparse
 
 from bs4 import BeautifulSoup
 
-import config
+import scraper.config as config
 
 log = logging.getLogger(__name__)
 

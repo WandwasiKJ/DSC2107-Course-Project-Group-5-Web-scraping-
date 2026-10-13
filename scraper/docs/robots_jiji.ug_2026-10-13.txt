@@ -1,0 +1,18 @@
+# AI/LLM information about this site: /llms.txt
+
+User-agent: *
+Disallow: /test/*
+Disallow: /admin/*
+Disallow: /crm/*
+Disallow: /auth/facebook*
+
+User-agent: Bingbot
+Disallow: /profile
+Disallow: /sc/
+Disallow: /*?*query=
+Disallow: /*?*period=
+Disallow: /*?*sort=
+Disallow: /test/*
+Disallow: /admin/*
+Disallow: /crm/*
+Disallow: /auth/facebook*

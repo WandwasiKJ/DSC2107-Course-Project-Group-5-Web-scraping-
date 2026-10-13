@@ -11,7 +11,7 @@ from pathlib import Path
 
 import pandas as pd
 
-import config
+import scraper.config as config
 from cleaning.clean import clean_run, load_raw_file
 
 log = logging.getLogger("load")

@@ -1,0 +1,18 @@
+2026-10-13 17:21:10,957 INFO scraper.fetch: Saved robots.txt copy to C:\Users\HP\Desktop\Year 2\DSC2107-Course-Project-Group-5-Web-scraping-\scraper\docs\robots_jiji.ug_2026-10-13.txt
+2026-10-13 17:21:16,073 INFO run: mobile-phones: site reports 6786 ads in total
+2026-10-13 17:21:16,122 INFO run: mobile-phones page 1: 24 cards (expected 20)
+2026-10-13 17:21:16,122 INFO run: mobile-phones page 1: +24 (category total 24)
+2026-10-13 17:21:22,064 INFO run: mobile-phones page 2: 24 cards (expected 20)
+2026-10-13 17:21:22,065 INFO run: mobile-phones page 2: +24 (category total 40)
+2026-10-13 17:21:26,264 INFO run: tablets: site reports 1356 ads in total
+2026-10-13 17:21:26,308 INFO run: tablets page 1: 24 cards (expected 20)
+2026-10-13 17:21:26,308 INFO run: tablets page 1: +24 (category total 24)
+2026-10-13 17:21:31,900 INFO run: tablets page 2: 24 cards (expected 20)
+2026-10-13 17:21:31,900 INFO run: tablets page 2: +24 (category total 40)
+2026-10-13 17:21:37,634 INFO run: smart-watches: site reports 1891 ads in total
+2026-10-13 17:21:37,675 INFO run: smart-watches page 1: 24 cards (expected 20)
+2026-10-13 17:21:37,676 INFO run: smart-watches page 1: +24 (category total 24)
+2026-10-13 17:21:42,142 INFO run: smart-watches page 2: 23 cards (expected 20)
+2026-10-13 17:21:42,142 INFO run: smart-watches page 2: +23 (category total 40)
+2026-10-13 17:21:42,160 INFO run: Sample written to C:\Users\HP\Desktop\Year 2\DSC2107-Course-Project-Group-5-Web-scraping-\scraper\data\sample\jiji_ug_sample.csv (120 rows)
+2026-10-13 17:21:42,160 INFO run: Done: 120 items, 7 requests, blocked=False
