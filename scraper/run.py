@@ -19,7 +19,9 @@ import json
 import logging
 import random
 import sys
+sys.path.append('C:/Users/jonnathan/Desktop/YEAR 2/Data Mining and Wrangling/webscraping/jiji_ug_scraper_starter_kit/jiji-ug-scraper/scraper')
 from datetime import date, datetime, timezone
+
 
 import scraper.config as config
 from scraper.fetch import (BlockedError, BudgetExceeded, PoliteSession,
