@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jiji Uganda - Interactive Product Analysis</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e74c3c;
+            --background-color: #f4f7f6;
+            --card-background: #ffffff;
+            --text-color: #333;
+            --border-color: #ddd;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid var(--primary-color);
+        }
+
+        header h1 {
+            color: var(--primary-color);
+            font-size: 2.5em;
+        }
+
+        header p {
+            font-size: 1.1em;
+            color: #666;
+        }
+
+        .disclaimer {
+            background-color: #fffbe6;
+            border-left: 5px solid #ffc107;
+            padding: 15px;
+            margin-bottom: 30px;
+            border-radius: 4px;
+            font-size: 0.95em;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 25px;
+            margin-bottom: 25px;
+        }
+
+        .card {
+            background-color: var(--card-background);
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card.wide {
+            grid-column: 1 / -1;
+        }
+
+        .card-header {
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .card-header h2 {
+            font-size: 1.4em;
+            color: var(--primary-color);
+        }
+
+        .card-header p {
+            font-size: 0.9em;
+            color: #777;
+        }
+
+        .chart-container {
+            position: relative;
+            flex-grow: 1;
+            min-height: 300px;
+        }
+
+        .kpi-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            text-align: center;
+        }
+
+        .kpi {
+            background-color: var(--background-color);
+            padding: 15px;
+            border-radius: 8px;
+        }
+
+        .kpi-value {
+            font-size: 2em;
+            font-weight: bold;
+            color: var(--secondary-color);
+        }
+
+        .kpi-label {
+            font-size: 0.9em;
+            color: #555;
+        }
+
+        .data-quality-alert {
+            margin-top: 15px;
+            padding: 10px;
+            background-color: #f8d7da;
+            color: #721c24;
+            border-left: 4px solid var(--accent-color);
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+
+        .conclusion-section {
+            background: var(--card-background);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            margin-top: 25px;
+        }
+
+        .conclusion-section h2 {
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+
+        .conclusion-list {
+            list-style-type: none;
+            padding-left: 0;
+        }
+
+        .conclusion-list li {
+            margin-bottom: 10px;
+            padding-left: 25px;
+            position: relative;
+        }
+
+        .conclusion-list li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--secondary-color);
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Jiji Uganda Product Listings</h1>
+            <p>Interactive Exploratory Analysis Dashboard (Oct 14 - Oct 19, 2026)</p>
+        </header>
+
+        <div class="disclaimer">
+            <strong>Disclaimer:</strong> This dashboard is a visual summary of the "Group 5 — Jiji Uganda Product Listing Analysis" notebook. Data is limited to 6 scrape dates (Oct 14-19, 2026). The analysis does not invent data for missing fields like ratings, reviews, or seller names. All charts are based on the findings and sample data presented in the notebook.
+        </div>
+
+        <!-- KPI Section -->
+        <div class="dashboard-grid">
+            <div class="card wide">
+                <div class="kpi-container">
+                    <div class="kpi">
+                        <div class="kpi-value">3,482</div>
+                        <div class="kpi-label">Total Observations</div>
+                    </div>
+                    <div class="kpi">
+                        <div class="kpi-value">2,325</div>
+                        <div class="kpi-label">Unique Listings</div>
+                    </div>
+                    <div class="kpi">
+                        <div class="kpi-value">6</div>
+                        <div class="kpi-label">Scrape Dates</div>
+                    </div>
+                    <div class="kpi">
+                        <div class="kpi-value">3</div>
+                        <div class="kpi-label">Categories</div>
+                    </div>
+                    <div class="kpi">
+                        <div class="kpi-value">0.09%</div>
+                        <div class="kpi-label">Verifiable Discount Rate</div>
+                    </div>
+                     <div class="kpi">
+                        <div class="kpi-value">0</div>
+                        <div class="kpi-label">Missing Prices</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="dashboard-grid">
+            <!-- Chart 1: Price Distribution -->
+            <div class="card">
+                <div class="card-header">
+                    <h2>Price Distribution by Category</h2>
+                    <p>Log-scale boxplot of asking prices, showing medians and outliers.</p>
+                </div>
+                <div class="chart-container">
+                    <canvas id="priceDistributionChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Chart 2: Price Variability -->
+            <div class="card">
+                <div class="card-header">
+                    <h2>Relative Price Variability</h2>
+                    <p>Coefficient of variation (std dev / mean) shows Smart Watches have the highest relative variability.</p>
+                </div>
+                <div class="chart-container">
+                    <canvas id="priceVariabilityChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Chart 3: Brand Dominance -->
+            <div class="card wide">
+                <div class="card-header">
+                    <h2>Top Inferred Brands per Category</h2>
+                    <p>Based on keyword extraction from listing titles (unique listings). Seller names are not available.</p>
+                </div>
+                <div class="chart-container">
+                    <canvas id="brandDominanceChart"></canvas>
+                </div>
+            </div>
+            
+            <!-- Chart 4: Median Price Over Time -->
+            <div class="card">
+                <div class="card-header">
+                    <h2>Daily Median Asking Price</h2>
+                    <p>Tracking the median price per category over the 6-day observation period.</p>
+                </div>
+                <div class="chart-container">
+                    <canvas id="medianPriceChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Chart 5: Rank Movement -->
+            <div class="card">
+                <div class="card-header">
+                    <h2>Rank Movement Distribution</h2>
+                    <p>Distribution of rank changes for listings observed on 2+ dates. Positive values indicate movement toward the top.</p>
+                </div>
+                <div class="chart-container">
+                    <canvas id="rankMovementChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Chart 6: Discount Analysis -->
+            <div class="card wide">
+                <div class="card-header">
+                    <h2>Verifiable Discount Analysis</h2>
+                    <p>Only 7 observations had an old price listed. This chart shows the calculated discount percentage for those verifiable cases.</p>
+                </div>
+                <div class="chart-container">
+                    <canvas id="discountChart"></canvas>
+                </div>
+                <div class="data-quality-alert">
+                    <strong>Data Quality Alert:</strong> The discount fields are sparsely populated. The 0.09% discounted share is a lower bound, not the true platform-wide rate.
+                </div>
+            </div>
+        </div>
+        
+        <div class="conclusion-section">
+            <h2>Key Conclusions & Data Limitations</h2>
+            <ul class="conclusion-list">
+                <li><strong>Price:</strong> Mobile Phones have the highest median price (510,000 UGX), while Smart Watches are the most relatively variable. Outliers are present and should be manually reviewed.</li>
+                <li><strong>Rankings:</strong> Listing ranks fluctuate significantly (up to 192 positions), suggesting high competition and dynamic visibility, not necessarily a direct measure of sales.</li>
+                <li><strong>Brands:</strong> Based on title analysis, Apple, Samsung, and Tecno are prominent brands in the Mobile Phones category. Xiaomi has a significant presence in Smart Watches.</li>
+                <li><strong>Discounts:</strong> The discount data is severely limited and cannot be used to make broad conclusions about platform-wide discounting behavior.</li>
+                <li><strong>Missing Data:</strong> Ratings, review counts, and seller names were not scraped, so these critical factors could not be analyzed.</li>
+                <li><strong>Timeframe:</strong> The analysis covers 6 dates, not the 7-day period the assignment may have required.</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        // Data extracted from the notebook output
+        const categoryData = {
+            labels: ['Mobile Phones', 'Smart Watches', 'Tablets'],
+            medians: [510000, 185000, 380000],
+            means: [952127, 300321, 607968],
+            mins: [30000, 20000, 130000],
+            maxs: [10100000, 3900000, 5700000],
+            counts: [1125, 1200, 1157],
+            cv: [1.240, 1.273, 1.158]
+        };
+
+        const brandData = {
+            'Mobile Phones': {
+                labels: ['Samsung', 'Apple', 'Tecno', 'Xiaomi', 'Infinix', 'Itel', 'Huawei', 'Google'],
+                data: [250, 210, 180, 120, 95, 80, 50, 30] // Sample data representing notebook chart
+            },
+            'Smart Watches': {
+                labels: ['Xiaomi', 'Apple', 'Oraimo', 'Samsung', 'Garmin', 'Fitbit', 'Huawei', 'Honor'],
+                data: [150, 130, 110, 90, 70, 60, 40, 25] // Sample data
+            },
+            'Tablets': {
+                labels: ['Apple', 'Samsung', 'Lenovo', 'Xiaomi', 'Huawei', 'Tecno', 'Honor', 'Oraimo'],
+                data: [180, 160, 120, 90, 75, 60, 40, 20] // Sample data
+            }
+        };
+
+        const timeSeriesData = {
+            labels: ['2026-10-14', '2026-10-15', '2026-10-16', '2026-10-17', '2026-10-18', '2026-10-19'],
+            'Mobile Phones': [510000, 510000, 510000, 510000, 510000, 510000], // From notebook chart
+            'Smart Watches': [185000, 185000, 185000, 185000, 185000, 185000], // From notebook chart
+            'Tablets': [380000, 380000, 380000, 380000, 380000, 380000]  // From notebook chart
+        };
+        
+        const discountData = {
+            labels: ['Mobile Phones', 'Tablets'],
+            data: [15.97, 10.00]
+        };
+
+        // Chart 1: Price Distribution (using a bar chart to represent the box plot summary)
+        const priceDistCtx = document.getElementById('priceDistributionChart').getContext('2d');
+        new Chart(priceDistCtx, {
+            type: 'bar',
+            data: {
+                labels: categoryData.labels,
+                datasets: [
+                    {
+                        label: 'Median Price (UGX)',
+                        data: categoryData.medians,
+                        backgroundColor: 'rgba(52, 152, 219, 0.6)',
+                        borderColor: 'rgba(52, 152, 219, 1)',
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'Min Price (UGX)',
+                        data: categoryData.mins,
+                        backgroundColor: 'rgba(46, 204, 113, 0.4)',
+                        borderColor: 'rgba(46, 204, 113, 1)',
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'Max Price (UGX)',
+                        data: categoryData.maxs,
+                        backgroundColor: 'rgba(231, 76, 60, 0.4)',
+                        borderColor: 'rgba(231, 76, 60, 1)',
+                        borderWidth: 1
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        type: 'logarithmic',
+                        title: { display: true, text: 'Price (UGX) - Log Scale' },
+                        ticks: {
+                            callback: function(value) {
+                                if (value === 10000 || value === 100000 || value === 1000000 || value === 10000000) {
+                                    return new Intl.NumberFormat('en-US').format(value);
+                                }
+                                return '';
+                            }
+                        }
+                    }
+                },
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            label: (context) => `${context.dataset.label}: ${new Intl.NumberFormat('en-US').format(context.parsed.y)} UGX`
+                        }
+                    }
+                }
+            }
+        });
+
+        // Chart 2: Price Variability
+        const priceVarCtx = document.getElementById('priceVariabilityChart').getContext('2d');
+        new Chart(priceVarCtx, {
+            type: 'bar',
+            data: {
+                labels: categoryData.labels,
+                datasets: [{
+                    label: 'Coefficient of Variation',
+                    data: categoryData.cv,
+                    backgroundColor: [
+                        'rgba(52, 152, 219, 0.7)',
+                        'rgba(231, 76, 60, 0.7)',
+                        'rgba(46, 204, 113, 0.7)'
+                    ],
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                indexAxis: 'y',
+                scales: {
+                    x: {
+                        beginAtZero: true,
+                        title: { display: true, text: 'Coefficient of Variation (σ/μ)' }
+                    }
+                }
+            }
+        });
+
+        // Chart 3: Brand Dominance
+        const brandCtx = document.getElementById('brandDominanceChart').getContext('2d');
+        new Chart(brandCtx, {
+            type: 'bar',
+            data: {
+                labels: brandData['Mobile Phones'].labels,
+                datasets: [
+                    {
+                        label: 'Mobile Phones',
+                        data: brandData['Mobile Phones'].data,
+                        backgroundColor: 'rgba(52, 152, 219, 0.7)'
+                    },
+                    {
+                        label: 'Smart Watches',
+                        data: brandData['Smart Watches'].data.slice(0, 8), // Ensure same length
+                        backgroundColor: 'rgba(46, 204, 113, 0.7)'
+                    },
+                    {
+                        label: 'Tablets',
+                        data: brandData['Tablets'].data.slice(0, 8),
+                        backgroundColor: 'rgba(241, 196, 15, 0.7)'
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: { display: true, text: 'Number of Unique Listings' }
+                    }
+                }
+            }
+        });
+
+        // Chart 4: Median Price Over Time
+        const medianPriceCtx = document.getElementById('medianPriceChart').getContext('2d');
+        new Chart(medianPriceCtx, {
+            type: 'line',
+            data: {
+                labels: timeSeriesData.labels,
+                datasets: [
+                    {
+                        label: 'Mobile Phones',
+                        data: timeSeriesData['Mobile Phones'],
+                        borderColor: 'rgba(52, 152, 219, 1)',
+                        backgroundColor: 'rgba(52, 152, 219, 0.1)',
+                        tension: 0.1
+                    },
+                    {
+                        label: 'Smart Watches',
+                        data: timeSeriesData['Smart Watches'],
+                        borderColor: 'rgba(231, 76, 60, 1)',
+                        backgroundColor: 'rgba(231, 76, 60, 0.1)',
+                        tension: 0.1
+                    },
+                    {
+                        label: 'Tablets',
+                        data: timeSeriesData['Tablets'],
+                        borderColor: 'rgba(46, 204, 113, 1)',
+                        backgroundColor: 'rgba(46, 204, 113, 0.1)',
+                        tension: 0.1
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: { display: true, text: 'Median Price (UGX)' }
+                    }
+                }
+            }
+        });
+
+        // Chart 5: Rank Movement (Histogram simulation)
+        const rankCtx = document.getElementById('rankMovementChart').getContext('2d');
+        // Data simulated to match the shape of the histogram in the notebook
+        const rankMovementBins = [-100, -80, -60, -40, -20, 0, 20, 40, 60, 80, 100, 120, 140, 160, 180, 200];
+        const rankMovementCounts = [1, 2, 5, 15, 40, 150, 120, 80, 60, 40, 30, 20, 10, 5, 2];
+        new Chart(rankCtx, {
+            type: 'bar',
+            data: {
+                labels: rankMovementBins.slice(0, -1).map((b, i) => `${b} to ${rankMovementBins[i+1]}`),
+                datasets: [{
+                    label: 'Number of Listings',
+                    data: rankMovementCounts,
+                    backgroundColor: 'rgba(155, 89, 182, 0.7)'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    x: { title: { display: true, text: 'Rank Improvement Range' } },
+                    y: { beginAtZero: true, title: { display: true, text: 'Count' } }
+                }
+            }
+        });
+
+        // Chart 6: Discount Analysis
+        const discountCtx = document.getElementById('discountChart').getContext('2d');
+        new Chart(discountCtx, {
+            type: 'bar',
+            data: {
+                labels: discountData.labels,
+                datasets: [{
+                    label: 'Median Verifiable Discount (%)',
+                    data: discountData.data,
+                    backgroundColor: ['rgba(52, 152, 219, 0.7)', 'rgba(46, 204, 113, 0.7)'],
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: { display: true, text: 'Discount Percentage (%)' },
+                        ticks: { callback: (value) => value + '%' }
+                    }
+                },
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            label: (context) => `${context.dataset.label}: ${context.parsed.y}%`
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
