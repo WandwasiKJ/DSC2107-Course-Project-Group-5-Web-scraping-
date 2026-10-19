@@ -33,6 +33,8 @@ CREATE TABLE IF NOT EXISTS products (
     product_id        INTEGER PRIMARY KEY,
     source_listing_id TEXT NOT NULL UNIQUE,
     title             TEXT,
+    title_source      TEXT CHECK (title_source IN ('scraped','url_slug','missing') OR title_source IS NULL),
+    badge             TEXT,                -- text the card showed instead of a title (e.g. 'Replica', '5', '-16%')
     brand             TEXT,
     model             TEXT,
     storage_gb        INTEGER,
@@ -73,3 +75,4 @@ CREATE TABLE IF NOT EXISTS category_daily_totals (
 CREATE INDEX IF NOT EXISTS idx_obs_product ON observations(product_id);
 CREATE INDEX IF NOT EXISTS idx_obs_run     ON observations(run_id);
 CREATE INDEX IF NOT EXISTS idx_prod_cat    ON products(category_id);
+CREATE INDEX IF NOT EXISTS idx_prod_loc    ON products(location_id);
